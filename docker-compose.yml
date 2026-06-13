@@ -1,0 +1,64 @@
+networks:
+  redmine_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redmine_files:
+  redmine_plugins:
+  redmine_themes:
+
+secrets:
+  db_password:
+    file: ./db_password.txt
+  secret_key_base:
+    file: ./secret_key_base.txt
+
+services:
+  postgres:
+    image: postgres:16-bookworm
+    container_name: redmine_postgres
+    restart: always
+    networks:
+      - redmine_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: redmine_user
+      POSTGRES_DB: redmine_production
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U redmine_user -h localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redmine:
+    build: .
+    container_name: redmine_app
+    restart: always
+    ports:
+      - "8080:3000"
+    networks:
+      - redmine_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - redmine_files:/usr/src/redmine/files
+      - redmine_plugins:/usr/src/redmine/plugins
+      - redmine_themes:/usr/src/redmine/themes
+    environment:
+      REDMINE_DB_POSTGRES: postgres
+      REDMINE_DB_DATABASE: redmine_production
+      REDMINE_DB_USERNAME: redmine_user
+      REDMINE_DB_PASSWORD_FILE: /run/secrets/db_password
+      REDMINE_SECRET_KEY_BASE_FILE: /run/secrets/secret_key_base
+      TZ: Asia/Tokyo
+      REDMINE_PLUGINS_MIGRATE: "1"
+    secrets:
+      - db_password
+      - secret_key_base
