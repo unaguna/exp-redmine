@@ -2,12 +2,16 @@ FROM debian:bookworm AS builder
 
 RUN apt-get update && apt-get install -y unzip
 
-COPY plugins/*.zip /work/
+COPY plugins/ /tmp/plugins/
+COPY themes/ /tmp/themes/
 
 RUN mkdir /plugins && \
-    for f in /work/*.zip; do \
-    unzip -q "$f" -d /plugins; \
-    done
+    find /tmp/plugins -name '*.zip' \
+    -exec unzip -q {} -d /plugins \;
+
+RUN mkdir /themes && \
+    find /tmp/themes -name '*.zip' \
+    -exec unzip -q {} -d /themes \;
 
 
 FROM redmine:6.1.2
@@ -26,7 +30,8 @@ RUN apt-get update && \
     fc-cache -fv
 
 COPY --from=builder /plugins /usr/src/redmine/plugins
-RUN chown -R redmine /usr/src/redmine/plugins
+COPY --from=builder /themes /usr/src/redmine/themes
+RUN chown -R redmine /usr/src/redmine/plugins /usr/src/redmine/themes
 
 RUN mkdir -p /home/redmine/.bundle \
     && chown -R redmine:redmine \
