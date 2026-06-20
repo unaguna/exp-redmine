@@ -47,6 +47,7 @@ services:
         condition: service_healthy
     volumes:
       - redmine_files:/usr/src/redmine/files
+      - ./configuration.yml:/usr/src/redmine/config/configuration.yml:ro
     environment:
       REDMINE_DB_POSTGRES: postgres
       REDMINE_DB_DATABASE: redmine_production

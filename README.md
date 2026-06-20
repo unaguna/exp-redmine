@@ -1,6 +1,21 @@
 
 ## 手順
 
+### メール設定
+
+ここでは、Google Workspace の SMTP リレー サービスを使用する。
+
+#### SMTP リレー サービス 設定
+
+1. Google Workspace の管理コンソールから、アプリ -> Gmail -> ルーティング -> SMTP リレー サービス -> 設定 で下記項目を設定。
+    - 許可する送信者: ドメイン内のアドレスのみ
+    - 認証: 指定IPのみ
+    - TLS による暗号化を必須とする
+
+2. redmine起動後、管理 -> 設定 -> メール通知で、送信元メールアドレスを設定する。
+
+3. 上の画面の右下からテストメールを送信する。
+
 ### Redmine OAuth plugin 設定例
 
 [Redmine OAuth plugin](https://github.com/kontron/redmine_oauth) を使用する際の設定内容。ここでは、Google Workspace のアカウントでログインする例で設定を記載します。
