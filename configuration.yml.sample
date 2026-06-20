@@ -1,4 +1,6 @@
 production:
+  database_cipher_key: sample_key
+
   email_delivery:
     delivery_method: :smtp
     smtp_settings:
