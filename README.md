@@ -1,6 +1,11 @@
 
 ## 手順
 
+### Easy Gantt Plugin 利用手順
+
+1. redmine起動後、管理 -> 設定 -> API で、「RESTによるWebサービスを有効にする」をONにする。
+2. 使用したいプロジェクトで Easy Gantt Plugin を有効にする。
+
 ### メール設定
 
 ここでは、Google Workspace の SMTP リレー サービスを使用する。
@@ -53,3 +58,5 @@
 
 - [Redmine.JP Blog](https://blog.redmine.jp/articles/6_1/redmine-6_1-docker/)
 - [打ち捨てられていたRedmineが復活するまでの軌跡 - Qiita](https://qiita.com/y_hokkey/items/44cae35f4a3f359f5c25)
+- [Redmine Gantt plugin](https://www.easy8.com/redmine-gantt-plugin)
+- [Redmine 用語解説](https://redmine.jp/glossary/)
